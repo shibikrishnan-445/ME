@@ -25,6 +25,16 @@ export async function loadDemoSME(): Promise<{ success: boolean; businessId: str
   return res.json();
 }
 
+export async function clearAllData(businessId?: string): Promise<{ success: boolean; message: string }> {
+  const res = await fetch(`${BASE_URL}/data/clear`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ businessId })
+  });
+  if (!res.ok) throw new Error('Failed to clear business data');
+  return res.json();
+}
+
 export async function uploadData(formData: FormData): Promise<any> {
   const res = await fetch(`${BASE_URL}/data/upload`, {
     method: 'POST',

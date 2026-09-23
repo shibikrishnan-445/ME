@@ -11,11 +11,12 @@ import {
   FileText,
   Layers,
   Database,
-  Download
+  Download,
+  Trash2
 } from 'lucide-react';
 import { useBusiness } from '../context/BusinessContext';
 import { useToast } from '../context/ToastContext';
-import { uploadData } from '../services/api';
+import { uploadData, clearAllData } from '../services/api';
 import { Badge } from '../components/common/Badge';
 
 export const DataUploadPage: React.FC = () => {
@@ -96,6 +97,18 @@ export const DataUploadPage: React.FC = () => {
     }
   };
 
+  const handleClearData = async () => {
+    try {
+      await clearAllData(businessId);
+      setUploadResult(null);
+      setSelectedFile(null);
+      triggerRefresh();
+      showToast('Database Cleared', 'All temporary and demo data wiped out. Ready for custom file ingestion.', 'success');
+    } catch (err: any) {
+      showToast('Error', err.message, 'error');
+    }
+  };
+
   return (
     <div className="p-4 sm:p-8 space-y-8 max-w-6xl mx-auto">
       {/* Page Header */}
@@ -109,6 +122,14 @@ export const DataUploadPage: React.FC = () => {
 
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={handleClearData}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-xs sm:text-sm font-bold text-rose-300 hover:text-rose-200 transition-all shadow-sm"
+          >
+            <Trash2 className="w-4 h-4 text-rose-400" />
+            <span>CLEAR TEMPORARY DATA</span>
+          </button>
+
           <a
             href="/Sample_SME_Business_Data.xlsx"
             download="Sample_SME_Business_Data.xlsx"

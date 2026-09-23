@@ -107,4 +107,26 @@ router.get('/status', async (req: Request, res: Response) => {
   }
 });
 
+router.post('/clear', async (req: Request, res: Response) => {
+  try {
+    const businessId = (req.body.businessId as string) || DEMO_BUSINESS_ID;
+
+    await runQuery(`DELETE FROM sales WHERE business_id = ?`, [businessId]);
+    await runQuery(`DELETE FROM expenses WHERE business_id = ?`, [businessId]);
+    await runQuery(`DELETE FROM inventory WHERE business_id = ?`, [businessId]);
+    await runQuery(`DELETE FROM customers WHERE business_id = ?`, [businessId]);
+    await runQuery(`DELETE FROM insights WHERE business_id = ?`, [businessId]);
+    await runQuery(`DELETE FROM alerts WHERE business_id = ?`, [businessId]);
+    await runQuery(`DELETE FROM decisions WHERE business_id = ?`, [businessId]);
+    await runQuery(`DELETE FROM uploads WHERE business_id = ?`, [businessId]);
+
+    res.json({
+      success: true,
+      message: 'All temporary data removed successfully! You now have a clean slate to upload your own business data.'
+    });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 export default router;
