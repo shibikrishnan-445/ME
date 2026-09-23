@@ -33,9 +33,14 @@ router.get('/', async (req: Request, res: Response) => {
       WHERE business_id = ? AND date >= '2026-08-01' AND date < '2026-09-01'
     `, [businessId]);
 
-    const curRev = currentSales?.total_rev || 842000;
-    const prevRev = prevSales?.total_rev || 737000;
-    const revGrowth = Math.round(((curRev - prevRev) / prevRev) * 1000) / 10; // +14.2%
+    // Check total records
+    const salesCount = (await queryOne<{ count: number }>(`SELECT COUNT(*) as count FROM sales WHERE business_id = ?`, [businessId]))?.count || 0;
+    const expCount = (await queryOne<{ count: number }>(`SELECT COUNT(*) as count FROM expenses WHERE business_id = ?`, [businessId]))?.count || 0;
+    const hasData = salesCount > 0 || expCount > 0;
+
+    const curRev = currentSales?.total_rev ? Number(currentSales.total_rev) : 0;
+    const prevRev = prevSales?.total_rev ? Number(prevSales.total_rev) : 0;
+    const revGrowth = prevRev > 0 ? Math.round(((curRev - prevRev) / prevRev) * 1000) / 10 : 0;
 
     // 3. Expenses
     const currentExpenses = await queryOne<{ total_exp: number }>(`
@@ -50,15 +55,15 @@ router.get('/', async (req: Request, res: Response) => {
       WHERE business_id = ? AND date >= '2026-08-01' AND date < '2026-09-01'
     `, [businessId]);
 
-    const curExp = currentExpenses?.total_exp || 380000;
-    const prevExp = prevExpenses?.total_exp || 358000;
-    const expGrowth = Math.round(((curExp - prevExp) / prevExp) * 1000) / 10; // +6.1%
+    const curExp = currentExpenses?.total_exp ? Number(currentExpenses.total_exp) : 0;
+    const prevExp = prevExpenses?.total_exp ? Number(prevExpenses.total_exp) : 0;
+    const expGrowth = prevExp > 0 ? Math.round(((curExp - prevExp) / prevExp) * 1000) / 10 : 0;
 
     // 4. Net Profit
     const curProfit = curRev - curExp;
     const prevProfit = prevRev - prevExp;
-    const profitGrowth = Math.round(((curProfit - prevProfit) / Math.max(1, prevProfit)) * 1000) / 10; // +18.4%
-    const profitMargin = Math.round((curProfit / curRev) * 1000) / 10; // 38.7%
+    const profitGrowth = prevProfit !== 0 ? Math.round(((curProfit - prevProfit) / Math.abs(prevProfit)) * 1000) / 10 : 0;
+    const profitMargin = curRev > 0 ? Math.round((curProfit / curRev) * 1000) / 10 : 0;
 
     // 5. Total Inventory Value (Current Stock * Unit Cost)
     const invStats = await queryOne<{ total_val: number; total_items: number }>(`
@@ -66,13 +71,13 @@ router.get('/', async (req: Request, res: Response) => {
       FROM inventory 
       WHERE business_id = ?
     `, [businessId]);
-    const totalInventoryValue = invStats?.total_val || 1245000;
+    const totalInventoryValue = invStats?.total_val ? Number(invStats.total_val) : 0;
 
     // 6. Customers count
     const custStats = await queryOne<{ total: number }>(`
       SELECT COUNT(*) as total FROM customers WHERE business_id = ?
     `, [businessId]);
-    const totalCustomers = custStats?.total || 142;
+    const totalCustomers = custStats?.total ? Number(custStats.total) : 0;
 
     // 7. Monthly Revenue Trend Chart (Apr - Sep 2026)
     const monthlyRev = await queryAll<{ month: string; rev: number }>(`

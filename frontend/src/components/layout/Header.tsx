@@ -4,10 +4,11 @@ import { useBusiness } from '../../context/BusinessContext';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
+  onOpenLogin?: () => void;
   alertCount?: number;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, alertCount = 1 }) => {
+export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, onOpenLogin, alertCount = 1 }) => {
   const { businessName, isDemoMode, setActiveTab } = useBusiness();
 
   return (
@@ -46,6 +47,16 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, alertCount = 1 
 
       {/* Right Actions */}
       <div className="flex items-center gap-2 sm:gap-3">
+        {/* Log In / Sign Up CTA */}
+        {onOpenLogin && (
+          <button
+            onClick={onOpenLogin}
+            className="px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-xs font-bold text-emerald-300 hover:text-emerald-200 transition-all shadow-sm"
+          >
+            LOG IN / SIGN UP
+          </button>
+        )}
+
         {/* Quick Simulator CTA */}
         <button
           onClick={() => setActiveTab('simulator')}
@@ -77,7 +88,11 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, alertCount = 1 
         </button>
 
         {/* User Avatar */}
-        <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-semibold text-slate-200 cursor-pointer hover:border-slate-500">
+        <div
+          onClick={onOpenLogin}
+          title="Click to Open Login"
+          className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-semibold text-slate-200 cursor-pointer hover:border-emerald-400 transition-colors"
+        >
           RS
         </div>
       </div>

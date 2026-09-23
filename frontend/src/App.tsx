@@ -67,6 +67,7 @@ function AppContent() {
         {/* Top Header */}
         <Header
           onToggleSidebar={() => setIsSidebarOpen(prev => !prev)}
+          onOpenLogin={() => setCurrentView('login')}
         />
 
         {/* Scrollable Page Body */}
