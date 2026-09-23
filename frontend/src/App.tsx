@@ -24,7 +24,7 @@ import { SettingsPage } from './pages/SettingsPage';
 
 function AppContent() {
   const { activeTab } = useBusiness();
-  const [currentView, setCurrentView] = useState<'landing' | 'login' | 'setup' | 'app'>('app');
+  const [currentView, setCurrentView] = useState<'landing' | 'login' | 'setup' | 'app'>('login');
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   // If outside main app
