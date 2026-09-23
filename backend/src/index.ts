@@ -69,12 +69,8 @@ async function startServer() {
     await getDb();
     console.log('SQLite Database Initialized.');
 
-    // Auto-seed demo data if not already present
-    const existing = await queryOne(`SELECT id FROM businesses WHERE id = ?`, [DEMO_BUSINESS_ID]);
-    if (!existing) {
-      console.log('Seeding UrbanKart Retail demo dataset on first startup...');
-      await seedDemoData();
-    }
+    // Auto-seed demo data disabled to keep clean database when wiped by user.
+    // Demo dataset is only loaded when user explicitly clicks "LOAD DEMO SME".
 
     app.listen(PORT, () => {
       console.log(`=======================================================`);

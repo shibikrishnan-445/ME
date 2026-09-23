@@ -10,11 +10,21 @@ router.get('/', async (req: Request, res: Response) => {
   try {
     const businessId = (req.query.businessId as string) || DEMO_BUSINESS_ID;
 
-    // Check if business exists, if not seed demo
-    let business = await queryOne(`SELECT * FROM businesses WHERE id = ?`, [businessId]);
+    let business = await queryOne<{ id: string; name: string; business_type: string; employees: number; monthly_revenue_range: string; primary_products: string; location: string; currency: string; is_demo: number; created_at: string; updated_at: string }>(`SELECT * FROM businesses WHERE id = ?`, [businessId]);
     if (!business) {
-      await seedDemoData();
-      business = await queryOne(`SELECT * FROM businesses WHERE id = ?`, [DEMO_BUSINESS_ID]);
+      business = {
+        id: businessId,
+        name: 'My SME Business',
+        business_type: 'General',
+        employees: 1,
+        monthly_revenue_range: '₹0',
+        primary_products: '[]',
+        location: 'Local',
+        currency: '₹',
+        is_demo: 0,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
     }
 
     // 1. Calculate Health Score
