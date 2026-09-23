@@ -1,0 +1,11 @@
+Product,Category,Quantity,UnitPrice,UnitCost,Date,CustomerId
+Wireless Earbuds,Audio,15,1999,950,2026-09-01,CUST-101
+Mechanical Keyboard,Accessories,5,2499,1400,2026-09-02,CUST-102
+Smart Watch,Wearables,12,3999,2200,2026-09-03,CUST-103
+Wireless Mouse,Accessories,25,799,350,2026-09-04,CUST-104
+Power Bank 10000mAh,Accessories,8,1299,600,2026-09-05,CUST-105
+Bluetooth Speaker,Audio,7,1799,900,2026-09-06,CUST-106
+Wireless Earbuds,Audio,20,1999,950,2026-09-07,CUST-107
+Mechanical Keyboard,Accessories,3,2499,1400,2026-09-08,CUST-108
+Smart Watch,Wearables,10,3999,2200,2026-09-09,CUST-109
+Power Bank 10000mAh,Accessories,14,1299,600,2026-09-10,CUST-110

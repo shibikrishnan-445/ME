@@ -10,7 +10,8 @@ import {
   RotateCw,
   FileText,
   Layers,
-  Database
+  Database,
+  Download
 } from 'lucide-react';
 import { useBusiness } from '../context/BusinessContext';
 import { useToast } from '../context/ToastContext';
@@ -106,15 +107,27 @@ export const DataUploadPage: React.FC = () => {
           </p>
         </div>
 
-        {/* 1-Click Demo Loader CTA */}
-        <button
-          onClick={handleLoadDemo}
-          disabled={isLoadingDemo}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-xs sm:text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all self-start sm:self-auto"
-        >
-          <Sparkles className="w-4 h-4 text-emerald-200" />
-          <span>{isLoadingDemo ? 'Loading UrbanKart...' : 'LOAD DEMO SME'}</span>
-        </button>
+        {/* Action Buttons */}
+        <div className="flex flex-wrap items-center gap-3">
+          <a
+            href="/Sample_SME_Business_Data.xlsx"
+            download="Sample_SME_Business_Data.xlsx"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs sm:text-sm font-bold text-slate-200 hover:text-white transition-all shadow-sm"
+          >
+            <Download className="w-4 h-4 text-emerald-400" />
+            <span>Download Sample (.xlsx)</span>
+          </a>
+
+          {/* 1-Click Demo Loader CTA */}
+          <button
+            onClick={handleLoadDemo}
+            disabled={isLoadingDemo}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-xs sm:text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all self-start sm:self-auto"
+          >
+            <Sparkles className="w-4 h-4 text-emerald-200" />
+            <span>{isLoadingDemo ? 'Loading UrbanKart...' : 'LOAD DEMO SME'}</span>
+          </button>
+        </div>
       </div>
 
       {/* Category Tabs */}
